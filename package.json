@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Facebook Page Bot",
   "main": "index.js",
+  "type": "module",  // Add this line to specify the project is using ES Modules
   "scripts": {
     "start": "node index.js"
   },
