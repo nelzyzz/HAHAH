@@ -1,11 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import fetch from 'node-fetch';  // Use 'import' instead of 'require'
+import fetch from 'node-fetch';
 const app = express();
 
 // Replace with your Facebook Page Access Token and Webhook Verification Token
-const PAGE_ACCESS_TOKEN = 'EAAZAla0AZCCdUBOyYZAugtu3Sfzc0Kyi1jlMAOFMHFIRKG3xwIPPDVuxxkPRbY8AdTUhyda1m5FAHs2gezUlYWTUWQKlgc5etYM83keXimfFrtkaviK5iP9Sx5NqA3zrLxZA17PoMd0KNZCRiv8UovOCP4D9l1q9ox0OYnS1ZB2ZBpnIpupgBMexrZA6TRe5AclRcgZDZD';
+const PAGE_ACCESS_TOKEN = 'YOUR_PAGE_ACCESS_TOKEN';
 const VERIFY_TOKEN = 'pagebot';
+
+// Define a motto
+const motto = "Your success starts with a single step.";
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
@@ -21,20 +24,29 @@ app.get('/webhook', (req, res) => {
 });
 
 // Webhook for receiving messages (POST method)
-app.post('/webhook', (req, res) => {
+app.post('/webhook', async (req, res) => {
     const data = req.body;
 
     // Ensure this is from a page subscription
     if (data.object === 'page') {
         data.entry.forEach(entry => {
             const messagingEvents = entry.messaging;
-            messagingEvents.forEach(event => {
+            messagingEvents.forEach(async (event) => {
                 const senderId = event.sender.id;
 
                 if (event.message) {
                     if (event.message.text) {
-                        // Respond to text message
-                        sendTextMessage(senderId, "Thanks for your message!");
+                        const userMessage = event.message.text.trim();
+
+                        // Check if the message is a question
+                        if (userMessage.toLowerCase().includes('?')) {
+                            // Call the GPT-4 API to get a response
+                            const response = await getGpt4Response(userMessage);
+                            sendTextMessage(senderId, response);
+                        } else {
+                            // Respond with a predefined message or motto
+                            sendTextMessage(senderId, `Thanks for your message! Motto: "${motto}"`);
+                        }
                     } else if (event.message.attachments) {
                         // Handle image attachments or other media
                         handleImageAttachment(senderId, event.message.attachments);
@@ -98,7 +110,6 @@ function callSendAPI(messageData) {
 
 // AI-based Image Recognition (Optional - Using Google Vision API)
 async function analyzeImage(imageUrl) {
-    // Example AI service: You can replace this with Google Vision or any other AI service
     try {
         const response = await fetch(`https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDA8aCJIwi3ZcCI6ZAI5CCxnCWvYIy4q9g`, {
             method: 'POST',
@@ -111,13 +122,34 @@ async function analyzeImage(imageUrl) {
             })
         });
         const result = await response.json();
-        const labels = result.responses[0].labelAnnotations;
-        return labels.map(label => label.description).join(', ');
+        if (result.responses && result.responses[0] && result.responses[0].labelAnnotations) {
+            const labels = result.responses[0].labelAnnotations;
+            return labels.map(label => label.description).join(', ');
+        } else {
+            return 'Unable to analyze the image.';
+        }
     } catch (error) {
         console.error('Error analyzing image:', error);
         return 'Unable to analyze the image.';
     }
-} 
+}
+
+// Function to get response from GPT-4 API
+async function getGpt4Response(userMessage) {
+    const apiUrl = `https://joshweb.click/api/gpt-4o?q=${encodeURIComponent(userMessage)}&uid=1234`; // Example UID
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        if (data && data.answer) {
+            return data.answer;
+        } else {
+            return 'Sorry, I couldn\'t find an answer for that.';
+        }
+    } catch (error) {
+        console.error('Error calling GPT-4 API:', error);
+        return 'There was an error processing your request.';
+    }
+}
 
 // Start the Express server
 app.listen(process.env.PORT || 3000, () => {
