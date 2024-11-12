@@ -2,10 +2,10 @@
   "name": "facebook-page-bot",
   "version": "1.0.0",
   "description": "Facebook Page Bot",
-  "main": "index.js",  // Change server.js to index.js
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node index.js"  // Change server.js to index.js
+    "start": "node index.js"
   },
   "dependencies": {
     "express": "^4.18.2",
