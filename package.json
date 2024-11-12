@@ -2,10 +2,10 @@
   "name": "facebook-page-bot",
   "version": "1.0.0",
   "description": "Facebook Page Bot",
-  "main": "index.js",
-  "type": "module",  // Add this line to specify the project is using ES Modules
+  "main": "index.js",  // Change server.js to index.js
+  "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js"  // Change server.js to index.js
   },
   "dependencies": {
     "express": "^4.18.2",
