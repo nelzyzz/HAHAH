@@ -3,8 +3,9 @@ import bodyParser from 'body-parser';
 import fetch from 'node-fetch';
 const app = express();
 
-// Replace with your Facebook Page Access Token and Webhook Verification Token
-const PAGE_ACCESS_TOKEN = 'YOUR_PAGE_ACCESS_TOKEN';
+// Replace with your Facebook Page Access Token
+const PAGE_ACCESS_TOKEN = 'EAAZAla0AZCCdUBOxOCRwh9h7F5rWQFpmiK1Y9DZA7HDZAk0mtISmrGgwlqAS7avNoyMjYUddKeb7whZADudM1raKyJZBKLqTj9IRcWeYgPjCQCkD0eaVQBDwnswZCZA2t0ActM9Cx0tipNDm5FFqDVmKTzqboBw7zMPwAiBThkGfNcZAtxF7xIXMeF5RJyiJ94FGFmgMARNZCcnn0aFPRXxwZDZD';
+// Replace with your Webhook Verification Token
 const VERIFY_TOKEN = 'pagebot';
 
 // Define a motto
@@ -100,7 +101,11 @@ function callSendAPI(messageData) {
     .then(response => response.json())
     .then(data => {
         if (data.error) {
-            console.error('Error:', data.error);
+            console.error('Error:', data.error.message);
+            // Handle the OAuthException specifically
+            if (data.error.code === 190) {
+                console.error("OAuth Exception: Invalid or expired token.");
+            }
         }
     })
     .catch(error => {
