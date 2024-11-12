@@ -2,7 +2,7 @@
   "name": "facebook-page-bot",
   "version": "1.0.0",
   "description": "Facebook Page Bot",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
