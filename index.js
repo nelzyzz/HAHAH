@@ -4,7 +4,7 @@ import fetch from 'node-fetch';  // Use 'import' instead of 'require'
 const app = express();
 
 // Replace with your Facebook Page Access Token and Webhook Verification Token
-const PAGE_ACCESS_TOKEN = 'YOUR_PAGE_ACCESS_TOKEN';
+const PAGE_ACCESS_TOKEN = 'EAAZAla0AZCCdUBOyYZAugtu3Sfzc0Kyi1jlMAOFMHFIRKG3xwIPPDVuxxkPRbY8AdTUhyda1m5FAHs2gezUlYWTUWQKlgc5etYM83keXimfFrtkaviK5iP9Sx5NqA3zrLxZA17PoMd0KNZCRiv8UovOCP4D9l1q9ox0OYnS1ZB2ZBpnIpupgBMexrZA6TRe5AclRcgZDZD';
 const VERIFY_TOKEN = 'pagebot';
 
 // Middleware to parse JSON bodies
