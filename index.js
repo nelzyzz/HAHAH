@@ -1,6 +1,6 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
+import express from 'express';
+import bodyParser from 'body-parser';
+import fetch from 'node-fetch';  // Use 'import' instead of 'require'
 const app = express();
 
 // Replace with your Facebook Page Access Token and Webhook Verification Token
@@ -117,7 +117,7 @@ async function analyzeImage(imageUrl) {
         console.error('Error analyzing image:', error);
         return 'Unable to analyze the image.';
     }
-}
+} 
 
 // Start the Express server
 app.listen(process.env.PORT || 3000, () => {
